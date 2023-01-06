@@ -4,7 +4,6 @@ import {createMachine} from "xstate";
 import AutomatonManager from "../components/AutomatonManager/AutomatonManager";
 import {Automaton,State,Transition} from "../components/AutomatonManager/AutomatonManager";
 import {Button, useToast} from "@chakra-ui/react";
-import {EnvVars} from "./_env";
 const fetchMachineConfig = {
     'id': 'fetch',
     'initial': '0',
@@ -288,7 +287,7 @@ const Index = () => {
         }
     }
     function posto() {
-        fetch(EnvVars.API_URL+'Automaton/aut', {
+        fetch('Automaton/aut', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

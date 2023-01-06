@@ -127,12 +127,12 @@ export const StateNodeViz: React.FC<{
           data-rect-id={`${stateNode.id}:content`}
         >
           <div data-viz="stateNode-header">
-            {['history', 'final'].includes(stateNode.type) && (
-              <div
-                data-viz="stateNode-type"
-                data-viz-type={stateNode.type}
-                data-viz-history={stateNode.history ?? undefined}
-              ></div>
+            {['history', 'final'].includes(stateNode.type )||stateNode.meta === true && (
+                <div
+                    data-viz="stateNode-type"
+                    data-viz-type={stateNode.type}
+                    data-viz-history={stateNode.history ?? undefined}
+                ></div>
             )}
             <StateNodeKey value={stateNode.key} />
             {stateNode.tags.length > 0 && (

@@ -1,13 +1,16 @@
 import React from "react";
 import {Automaton} from "./AutomatonManager";
 import {Avatar, Box, Button, Table, TableContainer, Tbody, Td, Thead, Tr} from "@chakra-ui/react";
-import {DeleteIcon, PlusSquareIcon} from "@chakra-ui/icons";
+import {AddIcon, DeleteIcon, PlusSquareIcon} from "@chakra-ui/icons";
+import {AddCharacterModal} from "./AddRecordModals/AddCharacterModal";
 
 
-export const AlphabetManager = ({aut,removeChar}:{aut:Automaton,removeChar:(value:string)=>void}) =>{
+export const AlphabetManager = ({aut,removeCharFromAlphabet,addCharToAlphabet}:{aut:Automaton,
+                                removeCharFromAlphabet:(value:string)=>void,
+                                addCharToAlphabet:(value:string)=>void}) =>{
     return (
         <Box sx={{maxWidth:230}}>
-            <Button bg='green'><PlusSquareIcon></PlusSquareIcon>Shto</Button>
+            <AddCharacterModal addCharacter={addCharToAlphabet}></AddCharacterModal>
             <TableContainer borderRadius='md' bg='lightgrey' border='2px solid black'>
                 <Table>
                     <Thead>
@@ -33,7 +36,7 @@ export const AlphabetManager = ({aut,removeChar}:{aut:Automaton,removeChar:(valu
                                         </Avatar>
                                     </Td>
                                     <Td>
-                                        <Button colorScheme='red' onClick={() => removeChar(char)}><DeleteIcon></DeleteIcon></Button>
+                                        <Button colorScheme='red' onClick={() => removeCharFromAlphabet(char)}><DeleteIcon></DeleteIcon></Button>
                                     </Td>
                                 </Tr>
                             );

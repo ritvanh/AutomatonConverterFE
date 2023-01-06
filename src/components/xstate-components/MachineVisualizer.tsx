@@ -34,7 +34,7 @@ export const MachineVisualizer = ({ machine }: { machine: StateNode }) => {
       <Box sx={styles}>
         <SimulationProvider value={simService}>
           <Box
-            data-viz-theme="dark"
+            data-viz-theme="light"
             as="main"
             display="grid"
             gridTemplateColumns="1fr auto"

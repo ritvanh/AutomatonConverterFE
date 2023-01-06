@@ -253,7 +253,7 @@ const stateNodeVizStyles: CSSObject = {
       display: 'block',
       fontWeight: 'bold',
     },
-    "&[data-viz-type='final']": {
+    "&[data-viz-type='atomic']": {
       border: '2px solid var(--viz-color-transparent)',
       background: 'transparent',
       '&:before': {

@@ -36,7 +36,6 @@ export default AutomatonManager;
 export interface State{
     value:string;
     isFinal:boolean;
-    isInitial:boolean;
 }
 export interface Transition{
     from:string;
@@ -45,6 +44,7 @@ export interface Transition{
 }
 export interface Automaton{
     states:State[];
+    initialState:string|null;
     allTransitions:Transition[];
     alphabet:string[];
 }

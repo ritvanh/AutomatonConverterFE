@@ -17,7 +17,7 @@ const fetchMachineConfig = {
             on: {
                 'RESOLVE': 'success',
                 'REJECT': 'failure'
-            }
+            },
         },
         'success': {
             on: {
@@ -38,7 +38,8 @@ const alphabet:string[] = ["E"]
 const myAutomaton:Automaton = {
     alphabet:alphabet,
     allTransitions:[],
-    states:[]
+    states:[],
+    initialState:null
 }
 
 const Index = () => {
@@ -50,14 +51,14 @@ const Index = () => {
             let statesCopy = aut.states;
             let newState:State = {
                 value:value,
-                isInitial:false,
                 isFinal:false
             }
             statesCopy.push(newState);
             setAut(prevState => ({
                 allTransitions:prevState.allTransitions,
                 states:statesCopy,
-                alphabet:prevState.alphabet
+                alphabet:prevState.alphabet,
+                initialState:prevState.initialState
             }));
             toast({
                 title: `Gjendja u shtua`,
@@ -74,18 +75,27 @@ const Index = () => {
     }
     function removeState(value:string){
         if(getStateByValue(value) != null){
-            let statesCopy = aut.states.filter(x=>x.value != value);
-            let transitionsCopy = aut.allTransitions.filter(x=> x.from != value && x.to != value);
-            setAut(prevState => ({
-                states:statesCopy,
-                allTransitions:transitionsCopy,
-                alphabet:prevState.alphabet
-            }));
-            toast({
-                title: `Gjendja u hoq`,
-                status: "success",
-                isClosable: true,
-            })
+            if(aut.initialState != value) {
+                let statesCopy = aut.states.filter(x => x.value != value);
+                let transitionsCopy = aut.allTransitions.filter(x => x.from != value && x.to != value);
+                setAut(prevState => ({
+                    states: statesCopy,
+                    allTransitions: transitionsCopy,
+                    alphabet: prevState.alphabet,
+                    initialState: prevState.initialState
+                }));
+                toast({
+                    title: `Gjendja u hoq`,
+                    status: "success",
+                    isClosable: true,
+                })
+            }else{
+                toast({
+                    title: "Nuk mund te fshini gjendjen fillestare",
+                    status: "error",
+                    isClosable: true,
+                })
+            }
         }else{
             toast({
                 title: `Gjendja nuk u gjet`,
@@ -106,7 +116,8 @@ const Index = () => {
             setAut(prevState => ({
                 states:statesCopy,
                 allTransitions:prevState.allTransitions,
-                alphabet:prevState.alphabet
+                alphabet:prevState.alphabet,
+                initialState:prevState.initialState
             }));
             toast({
                 title: `Gjendja u ndryshua`,
@@ -121,41 +132,28 @@ const Index = () => {
             })
         }
     }
-    function toggleIsInitial(value:string){
+    function setInitialState(value:string){
         let stateToUpdate = getStateByValue(value);
         if(stateToUpdate != null){
-            let statesCopy = aut.states;
-            if(!stateToUpdate.isInitial){
-                statesCopy.forEach((st)=>{
-                    if(st.isInitial){
-                        st.isInitial = false;
-                    }
-                    if(st.value == value){
-                        st.isInitial = true;
-                    }
-                });
-            }else{
-                statesCopy.forEach((st)=>{
-                    if(st.value == value){
-                        st.isInitial = false;
-                    }
-                });
+            if(stateToUpdate.value != aut.initialState) {
+                setAut(prevState => ({
+                    states: prevState.states,
+                    allTransitions: prevState.allTransitions,
+                    alphabet: prevState.alphabet,
+                    initialState: value
+                }));
                 toast({
-                    title: `Tashme nuk keni gjendje fillestare`,
-                    status: "info",
+                    title: `Gjendja u ndryshua`,
+                    status: "success",
                     isClosable: true,
-                });
+                })
+            }else{
+                toast({
+                    title: `Kjo gjendje eshte tashme gjendja fillestare`,
+                    status: "warning",
+                    isClosable: true,
+                })
             }
-            setAut(prevState => ({
-                states:statesCopy,
-                allTransitions:prevState.allTransitions,
-                alphabet:prevState.alphabet
-            }));
-            toast({
-                title: `Gjendja u ndryshua`,
-                status: "success",
-                isClosable: true,
-            })
 
         }else{
             toast({
@@ -179,7 +177,8 @@ const Index = () => {
             setAut(prevState => ({
                 states: prevState.states,
                 alphabet: prevState.alphabet,
-                allTransitions: currenTransitions
+                allTransitions: currenTransitions,
+                initialState:prevState.initialState
             }));
             toast({
                 title: "Kalimi u fshi",
@@ -200,7 +199,8 @@ const Index = () => {
             setAut(prevState => ({
                 states:prevState.states,
                 alphabet:prevState.alphabet,
-                allTransitions:transitionsCopy
+                allTransitions:transitionsCopy,
+                initialState:prevState.initialState
             }));
             toast({
                 title: `Kalimi u shtua`,
@@ -231,7 +231,8 @@ const Index = () => {
                 setAut(prevState => ({
                     states: prevState.states,
                     alphabet: alphabetCopy,
-                    allTransitions: transitionCopy
+                    allTransitions: transitionCopy,
+                    initialState:prevState.initialState
                 }));
                 toast({
                     title: `Karakteri u fshi`,
@@ -261,7 +262,8 @@ const Index = () => {
             setAut(prevState => ({
                 states:prevState.states,
                 allTransitions:prevState.allTransitions,
-                alphabet:alphabetCopy
+                alphabet:alphabetCopy,
+                initialState:prevState.initialState
             }));
             toast({
                 title: `Karakteri u shtua ne alfabet`,
@@ -287,7 +289,7 @@ const Index = () => {
         }
     }
     function posto() {
-        fetch('Automaton/aut', {
+        fetch('https://localhost:7281/api/Automaton/epsilonNfa', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -313,7 +315,7 @@ const Index = () => {
                                 addState={addState}
                                 removeState={removeState}
                                 toggleIsFinal={toggleIsFinal}
-                                toggleIsInitial={toggleIsInitial}
+                                toggleIsInitial={setInitialState}
                                 removeTransition={removeTransition}
                                 addTransition={addTransition}
                                 removeCharFromAlphabet={removeCharFromAlphabet}

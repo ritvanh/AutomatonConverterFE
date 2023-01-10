@@ -47,7 +47,7 @@ export const StateManager = ({aut,addState,removeState,toggleIsFinal,
                 <Checkbox onChange={() => toggleIsFinal(state.value)} isChecked={state.isFinal}></Checkbox>
                 </Td>
                         <Td>
-                            <Checkbox onChange={() => toggleIsInitial(state.value)} isChecked={state.isInitial}></Checkbox>
+                            <Checkbox onChange={() => toggleIsInitial(state.value)} isChecked={state.value == aut.initialState}></Checkbox>
                         </Td>
                 <Td>
                 <Button colorScheme='red' onClick={() => removeState(state.value)}><DeleteIcon></DeleteIcon></Button>
